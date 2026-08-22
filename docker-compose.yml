@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   filemind-backend:
-    image: maven:3.9.9-eclipse-temurin-17
+    image: maven:3.9.9-eclipse-temurin-25
     working_dir: /workspace/backend
     volumes:
       - ./backend:/workspace/backend
