@@ -1,0 +1,70 @@
+server:
+  port: 8080
+  tomcat:
+    connection-timeout: 30m
+    keep-alive-timeout: 30m
+    max-http-form-post-size: -1
+    max-swallow-size: -1
+
+spring:
+  application:
+    name: filemind-backend
+  mvc:
+    async:
+      request-timeout: 30m
+  datasource:
+    url: ${FILEMIND_DB_URL:jdbc:h2:file:./data/filemind-local-v2;AUTO_SERVER=TRUE}
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+      file-size-threshold: 2MB
+
+filemind:
+  frontend-origin: ${FILEMIND_FRONTEND_ORIGIN:http://localhost:5173}
+  share:
+    base-url: ${FILEMIND_PUBLIC_APP_URL:${FILEMIND_FRONTEND_ORIGIN:http://localhost:5173}}
+  jwt:
+    secret: ${FILEMIND_JWT_SECRET:change-this-development-secret-key-please-1234567890}
+    expiration-ms: ${FILEMIND_JWT_EXPIRATION_MS:86400000}
+  ai:
+    base-url: ${FILEMIND_AI_BASE_URL:http://127.0.0.1:8000}
+    connect-timeout-ms: ${FILEMIND_AI_CONNECT_TIMEOUT_MS:3000}
+    read-timeout-ms: ${FILEMIND_AI_READ_TIMEOUT_MS:10000}
+    max-input-characters: ${FILEMIND_AI_MAX_INPUT_CHARACTERS:40000}
+  storage:
+    root: ${FILEMIND_STORAGE_ROOT:storage}
+    uploads: ${FILEMIND_UPLOADS_PATH:storage/uploads}
+    chunks: ${FILEMIND_CHUNKS_PATH:storage/chunks}
+    manifests: ${FILEMIND_MANIFESTS_PATH:storage/manifests}
+    chunking-strategy: ${FILEMIND_CHUNKING_STRATEGY:content-defined}
+    chunk-size: ${FILEMIND_CHUNK_SIZE:4096}
+    cdc-min-chunk-size: ${FILEMIND_CDC_MIN_CHUNK_SIZE:2048}
+    cdc-avg-chunk-size: ${FILEMIND_CDC_AVG_CHUNK_SIZE:4096}
+    cdc-max-chunk-size: ${FILEMIND_CDC_MAX_CHUNK_SIZE:8192}
+  document-processing:
+    max-extracted-characters: ${FILEMIND_MAX_EXTRACTED_CHARACTERS:200000}
+    max-inline-extraction-file-size-bytes: ${FILEMIND_MAX_INLINE_EXTRACTION_FILE_SIZE_BYTES:26214400}
+    ocr-enabled: ${FILEMIND_OCR_ENABLED:false}
+    tesseract-command: ${FILEMIND_TESSERACT_COMMAND:tesseract}
+    ocr-timeout-seconds: ${FILEMIND_OCR_TIMEOUT_SECONDS:12}
+
+logging:
+  level:
+    org.springframework.security: INFO
+    com.filemind: INFO

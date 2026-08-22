@@ -1,0 +1,50 @@
+# Local environment and credentials. Keep documented templates in Git.
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Frontend dependencies and build output
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Java and Maven output/local dependency caches
+backend/target/
+backend/.m2/
+backend/.m2-*/
+backend/.m2-run*/
+
+# Python virtual environments, caches, and test output
+ai-service/.venv/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local FileMind state: user data, chunks, manifests, staged uploads, and H2 files
+backend/data/
+backend/storage/
+
+# Local QA artifacts, logs, temporary files, and process files
+.qa-temp/
+.runlogs/
+logs/
+*.log
+*.log.*
+*.tmp
+*.temp
+*.pid
+
+# IDE and operating-system files
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+.DS_Store
+Thumbs.db

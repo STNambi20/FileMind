@@ -1,0 +1,2 @@
+﻿FileMind confirmation file.
+This verifies restore after AI rewrite and sharing.

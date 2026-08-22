@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  filemind-backend:
+    image: maven:3.9.9-eclipse-temurin-17
+    working_dir: /workspace/backend
+    volumes:
+      - ./backend:/workspace/backend
+    command: ["mvn", "spring-boot:run"]
+    ports:
+      - "8080:8080"
+    profiles: ["optional"]
+
+  filemind-ai:
+    image: python:3.11-slim
+    working_dir: /workspace/ai-service
+    volumes:
+      - ./ai-service:/workspace/ai-service
+    command: sh -c "pip install -r requirements.txt && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    ports:
+      - "8000:8000"
+    profiles: ["optional"]
