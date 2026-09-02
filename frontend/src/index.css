@@ -5,66 +5,66 @@
 :root {
   color-scheme: light;
   font-family: Inter, "Segoe UI Variable Text", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  --app-bg: #f4f7fb;
-  --app-bg-secondary: #eef3fb;
-  --app-surface: rgba(255, 255, 255, 0.9);
-  --app-surface-strong: rgba(255, 255, 255, 0.97);
+  --app-bg: #f3f6fb;
+  --app-bg-secondary: #edf3ff;
+  --app-surface: rgba(255, 255, 255, 0.84);
+  --app-surface-strong: rgba(255, 255, 255, 0.96);
   --app-surface-elevated: rgba(255, 255, 255, 0.98);
-  --app-surface-subtle: #f8fafc;
-  --app-card: rgba(255, 255, 255, 0.92);
-  --app-card-muted: #f8fafc;
-  --app-border: rgba(148, 163, 184, 0.2);
-  --app-border-strong: rgba(99, 102, 241, 0.18);
-  --app-text: #0f172a;
+  --app-surface-subtle: #f1f5ff;
+  --app-card: rgba(248, 250, 255, 0.96);
+  --app-card-muted: #edf4ff;
+  --app-border: rgba(100, 116, 139, 0.2);
+  --app-border-strong: rgba(79, 70, 229, 0.22);
+  --app-text: #132238;
   --app-text-secondary: #334155;
-  --app-text-muted: #64748b;
+  --app-text-muted: #5f728d;
   --app-icon: #334155;
   --app-focus-ring: rgba(79, 70, 229, 0.18);
-  --app-accent-surface: rgba(79, 70, 229, 0.1);
+  --app-accent-surface: rgba(79, 70, 229, 0.11);
   --app-accent-text: #4338ca;
-  --app-success-surface: #ecfdf5;
+  --app-success-surface: rgba(16, 185, 129, 0.1);
   --app-success-text: #047857;
-  --app-warning-surface: #fffbeb;
-  --app-warning-text: #b45309;
-  --app-info-surface: #eff6ff;
+  --app-warning-surface: rgba(245, 158, 11, 0.12);
+  --app-warning-text: #9a5b00;
+  --app-info-surface: rgba(59, 130, 246, 0.1);
   --app-info-text: #1d4ed8;
-  --app-error-surface: #fff1f2;
+  --app-error-surface: rgba(244, 63, 94, 0.09);
   --app-error-text: #be123c;
-  --app-shadow: 0 24px 50px rgba(15, 23, 42, 0.08);
-  --app-shadow-hover: 0 28px 56px rgba(15, 23, 42, 0.12);
-  --app-gradient: linear-gradient(145deg, #0b1222 0%, #111827 58%, #312e81 100%);
+  --app-shadow: 0 22px 44px rgba(15, 23, 42, 0.08);
+  --app-shadow-hover: 0 30px 60px rgba(15, 23, 42, 0.12);
+  --app-gradient: linear-gradient(145deg, #101c35 0%, #18253f 52%, #2d2c74 100%);
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --app-bg: #0b0f1a;
-  --app-bg-secondary: #111827;
-  --app-surface: rgba(17, 24, 39, 0.88);
-  --app-surface-strong: rgba(31, 41, 55, 0.94);
-  --app-surface-elevated: rgba(17, 24, 39, 0.94);
-  --app-surface-subtle: rgba(15, 23, 42, 0.86);
-  --app-card: rgba(31, 41, 55, 0.92);
-  --app-card-muted: rgba(17, 24, 39, 0.96);
-  --app-border: rgba(148, 163, 184, 0.28);
-  --app-border-strong: rgba(129, 140, 248, 0.38);
-  --app-text: #f3f4f6;
-  --app-text-secondary: #dbe4f0;
-  --app-text-muted: #a7b3c7;
-  --app-icon: #e5e7eb;
-  --app-focus-ring: rgba(129, 140, 248, 0.28);
-  --app-accent-surface: rgba(99, 102, 241, 0.18);
-  --app-accent-text: #c7d2fe;
-  --app-success-surface: rgba(6, 95, 70, 0.22);
-  --app-success-text: #6ee7b7;
-  --app-warning-surface: rgba(146, 64, 14, 0.24);
-  --app-warning-text: #fcd34d;
-  --app-info-surface: rgba(30, 64, 175, 0.24);
-  --app-info-text: #93c5fd;
-  --app-error-surface: rgba(127, 29, 29, 0.25);
-  --app-error-text: #fda4af;
-  --app-shadow: 0 30px 65px rgba(2, 6, 23, 0.45);
-  --app-shadow-hover: 0 34px 72px rgba(2, 6, 23, 0.52);
-  --app-gradient: linear-gradient(145deg, #0b0f1a 0%, #111827 56%, #312e81 100%);
+  --app-bg: #0d1728;
+  --app-bg-secondary: #111f34;
+  --app-surface: rgba(18, 27, 40, 0.92);
+  --app-surface-strong: rgba(21, 34, 52, 0.98);
+  --app-surface-elevated: rgba(28, 41, 61, 0.98);
+  --app-surface-subtle: rgba(35, 49, 72, 0.94);
+  --app-card: rgba(23, 35, 52, 0.98);
+  --app-card-muted: rgba(31, 45, 66, 0.95);
+  --app-border: rgba(148, 163, 184, 0.38);
+  --app-border-strong: rgba(165, 180, 252, 0.72);
+  --app-text: #edf5ff;
+  --app-text-secondary: #e0ebff;
+  --app-text-muted: #b9c9e3;
+  --app-icon: #edf5ff;
+  --app-focus-ring: rgba(96, 165, 250, 0.32);
+  --app-accent-surface: rgba(59, 130, 246, 0.18);
+  --app-accent-text: #dfeeff;
+  --app-success-surface: rgba(16, 185, 129, 0.18);
+  --app-success-text: #b4f5d5;
+  --app-warning-surface: rgba(245, 158, 11, 0.18);
+  --app-warning-text: #f9d78b;
+  --app-info-surface: rgba(96, 165, 250, 0.18);
+  --app-info-text: #dbeafe;
+  --app-error-surface: rgba(244, 63, 94, 0.18);
+  --app-error-text: #fecdd3;
+  --app-shadow: 0 28px 60px rgba(2, 6, 23, 0.5);
+  --app-shadow-hover: 0 32px 68px rgba(2, 6, 23, 0.58);
+  --app-gradient: linear-gradient(145deg, #0d1729 0%, #162a46 48%, #2f2d73 100%);
 }
 
 :root[data-high-contrast="true"] {
@@ -219,10 +219,20 @@ body::before {
   }
 
   .hero-panel {
-    @apply relative overflow-hidden rounded-[32px] border p-6 text-white sm:p-8;
-    background: var(--app-gradient);
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 34px 72px rgba(15, 23, 42, 0.28);
+    @apply relative overflow-hidden rounded-[32px] border p-6 shadow-[0_20px_52px_rgba(79,70,229,0.18)] sm:p-8;
+    background: linear-gradient(135deg, rgba(12, 20, 32, 0.98) 0%, rgba(24, 60, 110, 0.88) 42%, rgba(63, 46, 132, 0.8) 100%);
+    border-color: rgba(191, 219, 254, 0.22);
+    color: #f8fbff;
+  }
+
+  :root[data-theme="light"] .hero-panel {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(37, 99, 235, 0.82) 36%, rgba(109, 40, 217, 0.72) 100%);
+  }
+
+  :root[data-theme="dark"] .hero-panel {
+    background: linear-gradient(135deg, rgba(9, 17, 28, 0.98) 0%, rgba(22, 40, 66, 0.96) 42%, rgba(56, 42, 124, 0.9) 100%);
+    border-color: rgba(165, 180, 252, 0.42);
+    box-shadow: 0 22px 52px rgba(15, 23, 42, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
   }
 
   .hero-panel::after {
@@ -386,8 +396,21 @@ body::before {
 
   .shell-glass {
     @apply border backdrop-blur-xl;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(239, 246, 255, 0.88));
+    border-color: var(--app-border);
+    color: var(--app-text);
+  }
+
+  :root[data-theme="dark"] .shell-glass {
+    background: linear-gradient(180deg, rgba(20, 31, 46, 0.96), rgba(15, 23, 36, 0.96));
+    border-color: rgba(148, 163, 184, 0.42);
+    box-shadow: 0 18px 42px rgba(2, 6, 23, 0.34);
+  }
+
+  .app-sidebar {
     background: var(--app-surface);
     border-color: var(--app-border);
+    color: var(--app-text);
   }
 
   .shadow-panel {
@@ -530,8 +553,15 @@ body::before {
 
 :root[data-theme="dark"] .card {
   background:
-    linear-gradient(180deg, rgba(31, 41, 55, 0.96) 0%, rgba(17, 24, 39, 0.96) 100%);
-  border-color: var(--app-border);
+    linear-gradient(180deg, rgba(28, 41, 61, 0.98) 0%, rgba(17, 26, 39, 0.98) 100%);
+  border-color: rgba(148, 163, 184, 0.38);
+  box-shadow: 0 22px 42px rgba(2, 6, 23, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+:root[data-theme="dark"] .surface-panel,
+:root[data-theme="dark"] .app-surface-elevated,
+:root[data-theme="dark"] .app-surface-subtle {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
 :root[data-theme="dark"] .tab-pill-active {

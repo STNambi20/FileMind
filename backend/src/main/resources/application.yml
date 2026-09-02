@@ -35,6 +35,14 @@ spring:
       max-request-size: -1
       file-size-threshold: 2MB
 
+aws:
+  enabled: ${AWS_STORAGE_ENABLED:true}
+  region: ${AWS_REGION:ap-south-1}
+  s3:
+    bucket-name: ${AWS_S3_BUCKET_NAME:filemind-s3-bucket}
+  dynamodb:
+    table-name: ${AWS_DYNAMODB_TABLE_NAME:FileMindMetadata}
+
 filemind:
   frontend-origin: ${FILEMIND_FRONTEND_ORIGIN:http://localhost:5173}
   share:

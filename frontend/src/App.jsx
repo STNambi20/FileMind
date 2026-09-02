@@ -13,6 +13,8 @@ import AIToolsPage from "./pages/AIToolsPage";
 import ActivityPage from "./pages/ActivityPage";
 import SettingsPage from "./pages/SettingsPage";
 import SharedFilePage from "./pages/SharedFilePage";
+import AdminPage from "./pages/AdminPage";
+import AdminRoute from "./components/feedback/AdminRoute";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -39,6 +41,9 @@ function App() {
           <Route path="/activity" element={<ActivityPage />} />
           <Route path="/ai-tools" element={<AIToolsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route element={<AdminRoute />}>
+            <Route path="/admin" element={<AdminPage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

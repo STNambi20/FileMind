@@ -42,6 +42,30 @@ public class AuthService {
         return buildAuthResponse(savedUser);
     }
 
+    public AuthResponse bootstrapAdmin(RegisterRequest request) {
+        boolean hasAdmin = userRepository.findAll().stream()
+            .anyMatch(user -> user.getRole() == UserRole.ADMIN);
+
+        if (hasAdmin) {
+            throw new BadRequestException("An admin account already exists");
+        }
+
+        String normalizedEmail = request.email().trim().toLowerCase();
+        if (userRepository.existsByEmailIgnoreCase(normalizedEmail)) {
+            throw new BadRequestException("An account with this email already exists");
+        }
+
+        User user = new User();
+        user.setFullName(request.fullName().trim());
+        user.setEmail(normalizedEmail);
+        user.setPasswordHash(passwordEncoder.encode(request.password()));
+        user.setRole(UserRole.ADMIN);
+
+        User savedUser = userRepository.save(user);
+        activityService.log(ActivityAction.REGISTER, savedUser, null, "Created the first admin account");
+        return buildAuthResponse(savedUser);
+    }
+
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmailIgnoreCase(request.email().trim().toLowerCase())
             .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));

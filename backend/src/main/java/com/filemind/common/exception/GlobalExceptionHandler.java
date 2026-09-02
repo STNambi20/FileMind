@@ -3,7 +3,9 @@ package com.filemind.common.exception;
 import com.filemind.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,6 +32,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ForbiddenOperationException.class)
     public ResponseEntity<ApiResponse<Object>> handleForbidden(ForbiddenOperationException exception) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error(exception.getMessage(), null));
+    }
+
+    @ExceptionHandler({AccessDeniedException.class, AuthorizationDeniedException.class})
+    public ResponseEntity<ApiResponse<Object>> handleAccessDenied(Exception exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+            .body(ApiResponse.error("Access denied.", null));
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)

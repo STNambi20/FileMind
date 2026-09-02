@@ -14,6 +14,7 @@ function RegisterPage() {
   const [form, setForm] = useState({ fullName: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -82,14 +83,24 @@ function RegisterPage() {
               </label>
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-slate-700">Password</span>
-                <input
-                  className="input"
-                  type="password"
-                  placeholder="Create a secure password"
-                  value={form.password}
-                  onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    className="input pr-11"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Create a secure password"
+                    value={form.password}
+                    onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-3 flex items-center text-slate-500 transition hover:text-slate-700"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    onClick={() => setShowPassword((current) => !current)}
+                  >
+                    <AppIcon name="eye" className="h-4 w-4" />
+                  </button>
+                </div>
               </label>
               <p className="text-xs text-slate-500">Use at least 8 characters with uppercase, lowercase, and a number.</p>
               {error ? <p className="rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}

@@ -26,13 +26,13 @@ public class ActivityService {
     public void log(ActivityAction action, User actor, Document document, DocumentVersion version, String details) {
         ActivityEvent event = new ActivityEvent();
         event.setAction(action);
-        event.setActorName(actor.getFullName());
-        event.setActorEmail(actor.getEmail());
+        event.setActorName(actor != null ? actor.getFullName() : "System");
+        event.setActorEmail(actor != null ? actor.getEmail() : "system@local");
         event.setDocumentId(document != null ? document.getId() : null);
         event.setDocumentName(document != null ? document.getName() : null);
         event.setVersionId(version != null ? version.getId() : null);
         event.setVersionNumber(version != null ? version.getVersionNumber() : null);
-        event.setDetails(details);
+        event.setDetails(details != null ? details : "");
         activityEventRepository.save(event);
     }
 

@@ -18,10 +18,24 @@
     <description>Local-first starter backend for FileMind</description>
 
     <properties>
-        <java.version>25</java.version>
+        <java.version>21</java.version>
+        <maven.compiler.release>21</maven.compiler.release>
         <jjwt.version>0.12.6</jjwt.version>
         <lombok.version>1.18.44</lombok.version>
+        <aws.sdk.version>2.25.32</aws.sdk.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>${aws.sdk.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -49,6 +63,14 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>5.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>dynamodb-enhanced</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

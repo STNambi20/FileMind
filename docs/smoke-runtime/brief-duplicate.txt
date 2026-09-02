@@ -1,2 +1,0 @@
-﻿FileMind integration smoke file.
-This document verifies upload, dashboard metrics, AI summary, tags, and rewrite workflows.

@@ -1,2 +1,0 @@
-﻿FileMind confirmation file.
-This verifies restore after AI rewrite, sharing, and dashboard refresh.

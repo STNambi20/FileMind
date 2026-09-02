@@ -7,7 +7,7 @@ import AppFooter from "../components/layout/AppFooter";
 import BrandMark from "../components/layout/BrandMark";
 import AppIcon from "../components/ui/AppIcon";
 
-const navItems = [
+const baseNavItems = [
   { label: "Dashboard", to: "/dashboard", icon: "dashboard", helper: "Workspace metrics" },
   { label: "Documents", to: "/files", icon: "files", helper: "Storage and review" },
   { label: "Activity", to: "/activity", icon: "activity", helper: "Audit and access" },
@@ -49,9 +49,14 @@ function AppLayout() {
     setMobileNavOpen(false);
   }, [location.pathname]);
 
+  const navItems = useMemo(
+    () => (user?.role === "ADMIN" ? [...baseNavItems, { label: "Admin", to: "/admin", icon: "shield", helper: "Users and governance" }] : baseNavItems),
+    [user?.role],
+  );
+
   const currentNav = useMemo(
     () => navItems.find((item) => location.pathname === item.to || location.pathname.startsWith(`${item.to}/`)) || navItems[0],
-    [location.pathname],
+    [location.pathname, navItems],
   );
 
   function handleLogout() {
@@ -80,19 +85,19 @@ function AppLayout() {
             className={({ isActive }) =>
               `group flex items-center gap-3 rounded-[22px] border px-4 py-3 transition duration-150 ${
                 isActive
-                  ? "border-white/10 bg-white/10 text-white shadow-[0_18px_38px_rgba(2,6,23,0.24)]"
+                  ? "border-[var(--app-border-strong)] bg-[var(--app-accent-surface)] text-[var(--app-text)] shadow-[0_18px_38px_rgba(15,23,42,0.08)]"
                   : isMobile
-                    ? "border-transparent text-slate-300 hover:border-white/8 hover:bg-white/6 hover:text-white"
-                    : "border-transparent text-slate-300 hover:border-white/8 hover:bg-white/6 hover:text-white"
+                    ? "border-transparent text-[var(--app-text-muted)] hover:border-[var(--app-border)] hover:bg-[var(--app-surface-subtle)] hover:text-[var(--app-text)]"
+                    : "border-transparent text-[var(--app-text-muted)] hover:border-[var(--app-border)] hover:bg-[var(--app-surface-subtle)] hover:text-[var(--app-text)]"
               }`
             }
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-inherit transition group-hover:bg-white/14">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--app-surface-subtle)] text-inherit transition group-hover:bg-[var(--app-surface-elevated)]">
               <AppIcon className="h-4.5 w-4.5" name={item.icon} />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-medium">{item.label}</span>
-              <span className="mt-1 block text-xs text-slate-400">{item.helper}</span>
+              <span className="mt-1 block text-xs text-[var(--app-text-muted)]">{item.helper}</span>
             </span>
           </NavLink>
         ))}
@@ -108,46 +113,46 @@ function AppLayout() {
       {mobileNavOpen ? <div className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm lg:hidden" onClick={() => setMobileNavOpen(false)} /> : null}
 
       <div className="mx-auto flex min-h-screen w-full max-w-[1680px]">
-        <aside className="hidden w-[19.5rem] shrink-0 border-r border-white/6 bg-[linear-gradient(180deg,#0b0f1a_0%,#111827_55%,#0f172a_100%)] px-6 py-7 text-white lg:flex">
+        <aside className="hidden w-[19.5rem] shrink-0 border-r border-[var(--app-border)] bg-[var(--app-surface)] px-6 py-7 text-[var(--app-text)] lg:flex">
           <div className="flex h-full w-full flex-col">
-            <div className="rounded-[30px] border border-white/8 bg-white/5 p-5 backdrop-blur-sm">
-              <BrandMark subtitle="Intelligent document platform" theme="dark" />
+            <div className="rounded-[30px] border border-[var(--app-border)] bg-[var(--app-surface-subtle)] p-5 backdrop-blur-sm">
+              <BrandMark subtitle="Intelligent document platform" theme={resolvedTheme === "dark" ? "dark" : "light"} />
             </div>
 
-            <div className="mt-6 rounded-[30px] border border-white/8 bg-white/4 p-4">
-              <p className="section-label text-slate-500">Navigation</p>
+            <div className="mt-6 rounded-[30px] border border-[var(--app-border)] bg-[var(--app-surface-subtle)] p-4">
+              <p className="section-label">Navigation</p>
               {renderNavigation()}
             </div>
 
             <div className="mt-auto space-y-4">
-              <div className="rounded-[28px] border border-white/8 bg-white/5 p-4">
-                <p className="section-label text-slate-500">Workspace</p>
-                <p className="mt-3 text-sm font-medium text-white">Storage-aware review and AI-assisted version control.</p>
+              <div className="rounded-[28px] border border-[var(--app-border)] bg-[var(--app-surface-subtle)] p-4">
+                <p className="section-label">Workspace</p>
+                <p className="mt-3 text-sm font-medium text-[var(--app-text)]">Storage-aware review and AI-assisted version control.</p>
                 <div className="mt-4 flex items-center gap-2">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-xs text-slate-300">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-[var(--app-border)] bg-[var(--app-surface-elevated)] px-3 py-1.5 text-xs text-[var(--app-text-secondary)]">
                     <span className="h-2 w-2 rounded-full bg-emerald-400" />
                     Live workspace
                   </span>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-xs text-slate-300">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-[var(--app-border)] bg-[var(--app-surface-elevated)] px-3 py-1.5 text-xs text-[var(--app-text-secondary)]">
                     {resolvedTheme === "dark" ? "Dark theme" : "Light theme"}
                   </span>
                 </div>
               </div>
 
-              <div className="rounded-[28px] border border-white/8 bg-white/6 p-4">
-                <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Session</p>
+              <div className="rounded-[28px] border border-[var(--app-border)] bg-[var(--app-surface-subtle)] p-4">
+                <p className="text-xs uppercase tracking-[0.18em] text-[var(--app-text-muted)]">Session</p>
                 <div className="mt-4 flex items-center gap-3">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/12 bg-white/10 text-sm font-semibold tracking-[0.08em] text-white shadow-[0_10px_24px_rgba(2,6,23,0.2)]">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-elevated)] text-sm font-semibold tracking-[0.08em] text-[var(--app-text)] shadow-[0_10px_24px_rgba(15,23,42,0.08)]">
                     {renderUserAvatar(user, "h-full w-full rounded-2xl object-cover")}
                   </span>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-white">{user?.fullName}</p>
-                    <p className="mt-1 truncate text-xs text-slate-300">{user?.email}</p>
+                    <p className="truncate text-sm font-medium text-[var(--app-text)]">{user?.fullName}</p>
+                    <p className="mt-1 truncate text-xs text-[var(--app-text-muted)]">{user?.email}</p>
                   </div>
                 </div>
-                <div className="mt-4 flex items-center justify-between rounded-2xl border border-white/8 bg-slate-950/36 px-3 py-2 text-xs text-slate-200">
+                <div className="mt-4 flex items-center justify-between rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-elevated)] px-3 py-2 text-xs text-[var(--app-text-secondary)]">
                   <span>{roleLabel(user?.role)}</span>
-                  <span className="rounded-full border border-emerald-400/18 bg-emerald-400/12 px-2 py-1 font-medium text-emerald-200">Active</span>
+                  <span className="rounded-full border border-emerald-400/18 bg-emerald-400/12 px-2 py-1 font-medium text-emerald-600 dark:text-emerald-200">Active</span>
                 </div>
               </div>
             </div>
@@ -156,28 +161,28 @@ function AppLayout() {
 
         <aside
           aria-hidden={!mobileNavOpen}
-          className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[calc(100vw-1.5rem)] transform border-r border-white/8 bg-[linear-gradient(180deg,#0b0f1a_0%,#111827_100%)] px-5 py-6 text-white shadow-2xl transition-transform duration-200 lg:hidden ${
+          className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[calc(100vw-1.5rem)] transform border-r border-[var(--app-border)] bg-[var(--app-surface)] px-5 py-6 text-[var(--app-text)] shadow-2xl transition-transform duration-200 lg:hidden ${
             mobileNavOpen ? "translate-x-0" : "-translate-x-full"
           }`}
           id="mobile-navigation"
           inert={mobileNavOpen ? undefined : ""}
         >
           <div className="flex items-start justify-between gap-4">
-            <BrandMark subtitle="Intelligent document platform" theme="dark" />
-            <button aria-label="Close navigation" className="button-ghost text-white hover:bg-white/10" onClick={() => setMobileNavOpen(false)} type="button">
+            <BrandMark subtitle="Intelligent document platform" theme={resolvedTheme === "dark" ? "dark" : "light"} />
+            <button aria-label="Close navigation" className="button-ghost text-[var(--app-text)] hover:bg-[var(--app-surface-subtle)]" onClick={() => setMobileNavOpen(false)} type="button">
               <AppIcon className="h-4 w-4" name="close" />
             </button>
           </div>
 
-          <div className="mt-6 rounded-[28px] border border-white/8 bg-white/5 p-4">
-            <p className="section-label text-slate-500">Navigation</p>
+          <div className="mt-6 rounded-[28px] border border-[var(--app-border)] bg-[var(--app-surface-subtle)] p-4">
+            <p className="section-label">Navigation</p>
             {renderNavigation(true)}
           </div>
         </aside>
 
         <main className="flex min-h-screen min-w-0 flex-1 flex-col" id="main-content">
-          <header className="sticky top-0 z-30 px-4 py-4 sm:px-6 lg:px-8">
-            <div className="shell-glass mx-auto flex w-full max-w-7xl flex-col gap-4 rounded-[28px] px-4 py-4 shadow-[0_18px_36px_rgba(15,23,42,0.08)] sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+          <header className="relative z-20 px-4 py-4 sm:px-6 lg:px-8">
+            <div className="shell-glass mx-auto flex w-full max-w-7xl flex-col gap-4 rounded-[28px] px-4 py-4 shadow-[0_12px_28px_rgba(15,23,42,0.06)] sm:px-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-start gap-3 sm:items-center">
                 <button aria-controls="mobile-navigation" aria-expanded={mobileNavOpen} className="button-ghost shrink-0 lg:hidden" onClick={() => setMobileNavOpen(true)} type="button">
                   <AppIcon className="h-4 w-4" name="menu" />
