@@ -15,6 +15,7 @@ import SettingsPage from "./pages/SettingsPage";
 import SharedFilePage from "./pages/SharedFilePage";
 import AdminPage from "./pages/AdminPage";
 import AdminRoute from "./components/feedback/AdminRoute";
+import CollaborationPage from "./pages/CollaborationPage";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -39,6 +40,7 @@ function App() {
           <Route path="/files/:fileId/view" element={<DocumentViewerPage />} />
           <Route path="/files/:fileId/versions" element={<VersionHistoryPage />} />
           <Route path="/activity" element={<ActivityPage />} />
+          <Route path="/collaboration" element={<CollaborationPage />} />
           <Route path="/ai-tools" element={<AIToolsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route element={<AdminRoute />}>

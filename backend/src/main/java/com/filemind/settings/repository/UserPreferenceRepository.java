@@ -1,11 +1,16 @@
 package com.filemind.settings.repository;
 
 import com.filemind.settings.entity.UserPreference;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.filemind.common.persistence.DynamoMetadataStore;
+import com.filemind.common.persistence.DynamoRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface UserPreferenceRepository extends JpaRepository<UserPreference, String> {
+@Repository
+public class UserPreferenceRepository extends DynamoRepository<UserPreference> {
+    public UserPreferenceRepository(DynamoMetadataStore store) { super(store, UserPreference.class); }
+    @Override protected String id(UserPreference preference) { return preference.getId(); }
 
-    Optional<UserPreference> findByUserId(String userId);
+    public Optional<UserPreference> findByUserId(String userId) { return findAll().stream().filter(p -> userId.equals(p.getUser().getId())).findFirst(); }
 }

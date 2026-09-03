@@ -1,7 +1,7 @@
 import api from "./api";
 
 export async function getDashboard() {
-  const { data } = await api.get("/dashboard");
+  const { data } = await api.get("/dashboard", { timeout: 10000 });
   return data.data;
 }
 

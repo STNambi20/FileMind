@@ -1,15 +1,20 @@
 package com.filemind.share.repository;
 
 import com.filemind.share.entity.PublicShareLink;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.filemind.common.persistence.DynamoMetadataStore;
+import com.filemind.common.persistence.DynamoRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface PublicShareLinkRepository extends JpaRepository<PublicShareLink, String> {
+@Repository
+public class PublicShareLinkRepository extends DynamoRepository<PublicShareLink> {
+    public PublicShareLinkRepository(DynamoMetadataStore store) { super(store, PublicShareLink.class); }
+    @Override protected String id(PublicShareLink link) { return link.getId(); }
 
-    Optional<PublicShareLink> findByDocumentId(String documentId);
+    public Optional<PublicShareLink> findByDocumentId(String documentId) { return findAll().stream().filter(l -> documentId.equals(l.getDocument().getId())).findFirst(); }
 
-    Optional<PublicShareLink> findByTokenAndEnabledTrue(String token);
+    public Optional<PublicShareLink> findByTokenAndEnabledTrue(String token) { return findAll().stream().filter(l -> l.isEnabled() && token.equals(l.getToken())).findFirst(); }
 
-    void deleteByDocumentId(String documentId);
+    public void deleteByDocumentId(String documentId) { findByDocumentId(documentId).ifPresent(this::delete); }
 }

@@ -1,11 +1,16 @@
 package com.filemind.comment.repository;
 
 import com.filemind.comment.entity.DocumentComment;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.filemind.common.persistence.DynamoMetadataStore;
+import com.filemind.common.persistence.DynamoRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface DocumentCommentRepository extends JpaRepository<DocumentComment, String> {
+@Repository
+public class DocumentCommentRepository extends DynamoRepository<DocumentComment> {
+    public DocumentCommentRepository(DynamoMetadataStore store) { super(store, DocumentComment.class); }
+    @Override protected String id(DocumentComment comment) { return comment.getId(); }
 
-    List<DocumentComment> findByDocumentIdOrderByCreatedAtDesc(String documentId);
+    public List<DocumentComment> findByDocumentIdOrderByCreatedAtDesc(String documentId) { return findAll().stream().filter(c -> documentId.equals(c.getDocument().getId())).sorted(java.util.Comparator.comparing(DocumentComment::getCreatedAt).reversed()).toList(); }
 }

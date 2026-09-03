@@ -1,0 +1,7 @@
+aws:
+  enabled: false
+
+filemind:
+  metadata:
+    # Tests must never write to the developer's real DynamoDB table.
+    in-memory: true

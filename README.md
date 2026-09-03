@@ -20,24 +20,24 @@ The AI service currently uses deterministic local heuristics. It does not requir
 | --- | --- |
 | Frontend | React 18, Vite 5, React Router, Axios, Tailwind CSS |
 | Backend | Java 17, Spring Boot 3.3.9, Spring Security, Spring Data JPA, Maven |
-| Metadata database | H2 file database for local development |
+| Metadata database | Amazon DynamoDB |
 | Document processing | Apache PDFBox, Apache POI, optional Tesseract OCR |
 | AI service | Python, FastAPI, Pydantic, Uvicorn, HTTPX |
-| Storage | Local filesystem chunk store, JSON manifests, SHA-256, gzip |
+| Storage | Amazon S3 chunk store and JSON manifests, SHA-256, gzip |
 
 ## Repository structure
 
 \`\`\`text
 filemind/
 |-- frontend/        React user interface and Node tests
-|-- backend/         Spring Boot API, H2 metadata, storage engine, and Java tests
+|-- backend/         Spring Boot API, DynamoDB metadata, S3 storage engine, and Java tests
 |-- ai-service/      FastAPI heuristic AI service and Python tests
 |-- docs/            Project guide and smoke-test sample documents
 |-- docker-compose.yml
 |-- README.md
 \`\`\`
 
-Runtime files are intentionally excluded from Git: \`backend/data\`, \`backend/storage\`, build output, dependency caches, logs, and local environment files. A new clone starts with an empty H2 database and empty chunk store.
+Runtime files are intentionally excluded from Git: \`backend/storage\`, build output, dependency caches, logs, and local environment files. Metadata and content are stored in the configured DynamoDB table and S3 bucket.
 
 ## Prerequisites
 
@@ -84,7 +84,9 @@ The main variables are:
 | Variable | Purpose |
 | --- | --- |
 | \`FILEMIND_JWT_SECRET\` | JWT signing key. Set a unique, long random value before sharing the application beyond local development. |
-| \`FILEMIND_DB_URL\` | H2 JDBC URL; default is a local file database under \`backend/data\`. |
+| \`AWS_REGION\` | AWS region used for both DynamoDB and S3. |
+| \`AWS_S3_BUCKET_NAME\` | S3 bucket for chunks and version manifests. |
+| \`AWS_DYNAMODB_TABLE_NAME\` | DynamoDB table for application metadata; its partition key must be \`fileId\` (String). |
 | \`FILEMIND_FRONTEND_ORIGIN\` | Allowed frontend origin for CORS. |
 | \`FILEMIND_PUBLIC_APP_URL\` | Base URL used for public share links. |
 | \`FILEMIND_AI_BASE_URL\` | AI service URL; default is \`http://127.0.0.1:8000\`. |
@@ -127,7 +129,7 @@ mvn "-Dspring-boot.run.arguments=--server.port=8081" spring-boot:run
 
 Health check: \`http://127.0.0.1:8081/api/health\`
 
-The optional H2 console is available at \`http://127.0.0.1:8081/h2-console\`. The default JDBC URL is \`jdbc:h2:file:./data/filemind-local-v2;AUTO_SERVER=TRUE\` when the working directory is \`backend\`.
+The backend uses the standard AWS SDK credential provider chain, so your Windows \`aws configure\` credentials are picked up automatically when you run it from your normal user account.
 
 ### 3. Frontend
 
@@ -158,7 +160,7 @@ Set-Location ../ai-service
 .\.venv\Scripts\python.exe -m unittest discover -s tests
 \`\`\`
 
-The backend test suite uses isolated H2 databases and test storage. The end-to-end workflow test includes a stubbed backend AI provider so it verifies orchestration and persistence without depending on a running FastAPI service.
+The backend test suite needs a DynamoDB-compatible test table or a mocked DynamoDB client. The end-to-end workflow test includes a stubbed backend AI provider so it verifies orchestration without depending on a running FastAPI service.
 
 ## Docker Compose note
 
@@ -183,7 +185,7 @@ The backend test suite uses isolated H2 databases and test storage. The end-to-e
 
 ## Known limitations and continuation work
 
-- Local H2, filesystem storage, and the in-process async executor are intended for development; cloud object storage, a production database, and a durable job queue are not implemented.
+- DynamoDB metadata queries currently use table scans for small deployments. Add DynamoDB GSIs before using it at larger scale.
 - Downloads reconstruct content into memory rather than streaming a response.
 - The heuristic AI provider is intentionally lightweight; it is not an LLM and has no benchmarked quality evaluation in the repository.
 - OCR requires a separately installed Tesseract executable and is disabled by default.

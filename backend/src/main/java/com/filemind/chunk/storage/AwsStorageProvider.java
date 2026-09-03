@@ -25,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Primary
@@ -33,6 +35,7 @@ public class AwsStorageProvider implements StorageProvider {
 
     private final S3Client s3Client;
     private final ObjectMapper objectMapper;
+    private final Map<String, StoredManifest> manifestCache = new ConcurrentHashMap<>();
 
     @Value("${aws.s3.bucket-name}")
     private String bucketName;
@@ -110,8 +113,10 @@ public class AwsStorageProvider implements StorageProvider {
             s3Client.putObject(PutObjectRequest.builder()
                     .bucket(bucketName)
                     .key(key)
-                    .build(), RequestBody.fromBytes(bytes));
-            return s3Uri(bucketName, key);
+                .build(), RequestBody.fromBytes(bytes));
+            String path = s3Uri(bucketName, key);
+            manifestCache.put(path, manifest);
+            return path;
         } catch (IOException exception) {
             throw new IllegalStateException("Unable to write manifest " + versionId + " to S3", exception);
         }
@@ -119,13 +124,17 @@ public class AwsStorageProvider implements StorageProvider {
 
     @Override
     public StoredManifest readManifest(String manifestPath) {
+        StoredManifest cached = manifestCache.get(manifestPath);
+        if (cached != null) return cached;
         try {
             S3ObjectLocation location = parseLocation(manifestPath);
             byte[] bytes = s3Client.getObject(GetObjectRequest.builder()
                     .bucket(location.bucketName())
                     .key(location.key())
                     .build(), ResponseTransformer.toBytes()).asByteArray();
-            return objectMapper.readValue(bytes, StoredManifest.class);
+            StoredManifest manifest = objectMapper.readValue(bytes, StoredManifest.class);
+            manifestCache.put(manifestPath, manifest);
+            return manifest;
         } catch (IOException exception) {
             throw new IllegalStateException("Unable to read manifest from S3: " + manifestPath, exception);
         }
@@ -138,6 +147,7 @@ public class AwsStorageProvider implements StorageProvider {
                 .bucket(location.bucketName())
                 .key(location.key())
                 .build());
+        manifestCache.remove(manifestPath);
     }
 
     private boolean hasObject(String key) {
@@ -210,7 +220,10 @@ public class AwsStorageProvider implements StorageProvider {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              GZIPOutputStream gzipStream = new GZIPOutputStream(outputStream)) {
             gzipStream.write(bytes);
-            gzipStream.flush();
+            // flush() only writes the gzip header and currently buffered data. finish()
+            // is required before reading the byte array so the compressed stream has
+            // its deflate payload and checksum trailer.
+            gzipStream.finish();
             return outputStream.toByteArray();
         } catch (IOException exception) {
             throw new IllegalStateException("Unable to gzip bytes before S3 upload", exception);

@@ -1,16 +1,21 @@
 package com.filemind.collaboration.repository;
 
 import com.filemind.collaboration.entity.DocumentAccess;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.filemind.common.persistence.DynamoMetadataStore;
+import com.filemind.common.persistence.DynamoRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface DocumentAccessRepository extends JpaRepository<DocumentAccess, String> {
+@Repository
+public class DocumentAccessRepository extends DynamoRepository<DocumentAccess> {
+    public DocumentAccessRepository(DynamoMetadataStore store) { super(store, DocumentAccess.class); }
+    @Override protected String id(DocumentAccess access) { return access.getId(); }
 
-    Optional<DocumentAccess> findByDocumentIdAndUserId(String documentId, String userId);
+    public Optional<DocumentAccess> findByDocumentIdAndUserId(String documentId, String userId) { return findAll().stream().filter(a -> documentId.equals(a.getDocument().getId()) && userId.equals(a.getUser().getId())).findFirst(); }
 
-    List<DocumentAccess> findByDocumentIdOrderByCreatedAtAsc(String documentId);
+    public List<DocumentAccess> findByDocumentIdOrderByCreatedAtAsc(String documentId) { return findAll().stream().filter(a -> documentId.equals(a.getDocument().getId())).sorted(java.util.Comparator.comparing(DocumentAccess::getCreatedAt)).toList(); }
 
-    void deleteByDocumentId(String documentId);
+    public void deleteByDocumentId(String documentId) { findByDocumentIdOrderByCreatedAtAsc(documentId).forEach(this::delete); }
 }

@@ -11,6 +11,7 @@ const baseNavItems = [
   { label: "Dashboard", to: "/dashboard", icon: "dashboard", helper: "Workspace metrics" },
   { label: "Documents", to: "/files", icon: "files", helper: "Storage and review" },
   { label: "Activity", to: "/activity", icon: "activity", helper: "Audit and access" },
+  { label: "Collaboration", to: "/collaboration", icon: "share", helper: "Folders and access" },
   { label: "AI Tools", to: "/ai-tools", icon: "spark", helper: "Document intelligence" },
   { label: "Settings", to: "/settings", icon: "settings", helper: "Theme and preferences" },
 ];
