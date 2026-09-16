@@ -14,6 +14,7 @@ public class FolderAccess {
     @ManyToOne(optional = false) private WorkspaceFolder folder;
     @ManyToOne(optional = false) private User user;
     @Enumerated(EnumType.STRING) @Column(nullable = false) private DocumentPermission permission;
+    @Enumerated(EnumType.STRING) @Column(nullable = false) private FolderAccessStatus status = FolderAccessStatus.PENDING;
     @Column(nullable = false) private Instant createdAt;
     @PrePersist void created() { createdAt = Instant.now(); }
 }
