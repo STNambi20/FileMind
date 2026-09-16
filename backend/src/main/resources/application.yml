@@ -12,23 +12,6 @@ spring:
   mvc:
     async:
       request-timeout: 30m
-  datasource:
-    url: ${FILEMIND_DB_URL:jdbc:h2:file:./data/filemind-local-v2;AUTO_SERVER=TRUE}
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  jpa:
-    open-in-view: false
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
   servlet:
     multipart:
       max-file-size: -1
@@ -44,6 +27,8 @@ aws:
     table-name: ${AWS_DYNAMODB_TABLE_NAME:FileMindMetadata}
 
 filemind:
+  metadata:
+    in-memory: ${FILEMIND_METADATA_IN_MEMORY:false}
   frontend-origin: ${FILEMIND_FRONTEND_ORIGIN:http://localhost:5173}
   share:
     base-url: ${FILEMIND_PUBLIC_APP_URL:${FILEMIND_FRONTEND_ORIGIN:http://localhost:5173}}
