@@ -28,6 +28,7 @@ public class DynamoMetadataStore {
     private static final String KEY = "fileId";
     private static final String TYPE = "entityType";
     private static final String PAYLOAD = "payload";
+    private static final int SCAN_PAGE_SIZE = 25;
 
     private final DynamoDbClient dynamoDbClient;
     private final ObjectMapper objectMapper;
@@ -110,7 +111,13 @@ public class DynamoMetadataStore {
         Map<String, List<Map<String, AttributeValue>>> refreshed = new ConcurrentHashMap<>();
         Map<String, AttributeValue> cursor = null;
         do {
-            var request = ScanRequest.builder().tableName(tableName).consistentRead(true);
+            // The existing table has no entityType index, so repository reads
+            // scan it. Keep each page small and eventually consistent so one
+            // refresh cannot exceed the table's low provisioned read capacity.
+            var request = ScanRequest.builder()
+                .tableName(tableName)
+                .consistentRead(false)
+                .limit(SCAN_PAGE_SIZE);
             if (cursor != null && !cursor.isEmpty()) request.exclusiveStartKey(cursor);
             var response = dynamoDbClient.scan(request.build());
             response.items().forEach(item -> refreshed
